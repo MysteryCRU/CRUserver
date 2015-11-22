@@ -1,5 +1,5 @@
 var monk = require('monk');
-const var COLLECTION = 'events';
+var COLLECTION = 'events';
 
 /**
  * Get a array of all events and send a JSON response to the app
@@ -50,5 +50,5 @@ function getDB() {
 }
 
 // export the functions below for modularity
-exports.getEvent = getEvent;
+exports.getEvents = getEvents;
 exports.getEventById = getEventById;
