@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/MysteryCRU/CRUserver#readme",
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "monk": "^1.0.1"
   }
 }
