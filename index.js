@@ -4,12 +4,14 @@ var events = require('./events/events.js');
 
 // I don't know what should happen when root is requested... so I'm leaving this
 app.get('/', function (req, res, next) {
-    res.writeHead(200, {
-      'Content-Type' : 'text/html',
-    });
+   //  res.writeHead(200, {
+   //    'Content-Type' : 'text/html',
+   //  });
 
-   res.end('<!DOCTYPE html> <html> <head> <title>Test</title></head><body>'
-           + '<h1>Testing Web Server, Bro!</h1></body></html>');
+   // res.end('<!DOCTYPE html> <html> <head> <title>Test</title></head><body>'
+   //         + '<h1>Testing Web Server, Bro!</h1></body></html>');
+
+	events.getEvents(req, res);
 });
 
 app.get('/campuses', function (req, res) {
