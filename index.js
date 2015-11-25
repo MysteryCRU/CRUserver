@@ -1,6 +1,13 @@
 var app = require('express')();
-var campuses = require('./campuses/campuses.js');
-var events = require('./events/events.js');
+var db = require('monk')(process.env.MONGO_URI);
+
+// import event class/object and create a new instance
+var Event = require('./events/events.js');
+var events = new Event('events');
+
+// import campus class/object and create a new instance
+var Campus = require('./campuses/campuses.js');
+var campuses = new Campus('campus');
 
 // I don't know what should happen when root is requested... so I'm leaving this
 app.get('/', function (req, res, next) {
@@ -13,20 +20,37 @@ app.get('/', function (req, res, next) {
 });
 
 app.get('/campuses', function (req, res) {
-	campuses.getCampuses(req, res);
+	campuses.getAll(req, res, db);
 });
 
 app.get('/campuses/:id', function (req, res) {
-	campuses.getCampusById(req, res);
+	campuses.getById(req, res, db);
 });
 
 app.get('/events', function (req, res) {
-	events.getEvents(req, res);
+	events.getAll(req, res, db);
 });
 
 app.get('/events/:id', function (req, res) {
-	events.getEventById(req, res);
+	events.getById(req, res, db);
 });
 
-console.log('Yo this test worked sorta');
+// for Cntrl + C shutdowns
+process.on('SIGINT', function() {
+	closeServer();
+});
+
+// for kill/pkill shutdowns
+process.on('SIGTERM', function() {
+	closeServer();
+});
+
+function closeServer() {
+	console.log('Closing connection to database...');
+	db.close(function() {
+		console.log('Exiting program now.');
+		process.exit();
+	});
+}
+
 app.listen(8080);
