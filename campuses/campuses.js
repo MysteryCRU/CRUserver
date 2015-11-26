@@ -9,6 +9,6 @@ util.inherits(Campuses, BaseModel);
 
 Campuses.prototype.testModel = function () {
 	console.log('Campuses model is working');
-}
+};
 
 module.exports = Campuses;
