@@ -1,54 +1,17 @@
-var monk = require('monk');
-var COLLECTION = 'events';
+var util = require('util');
+var BaseModel = require('../BaseModel.js'); // import base model for code reuse
 
-/**
- * Get a array of all events and send a JSON response to the app
- */
-function getEvents(req, res) {
-	var db = getDB();
-
-	// get events collection, find all events in the collection
-	db.get(COLLECTION).find({}, function (err, data) {
-		if (err) {
-			// send internal server error status to client
-			res.sendStatus(500);
-		} else {
-			// send that data in JSON format
-			res.json(data);
-		}
-
-		// close the database connection
-		db.close();
-	});
+// create constructor for events
+function Events(collection) {
+    // pass parameters to super class
+	BaseModel.apply(this, new Array(collection));
 }
 
-/**
- * Get a single event based on it's id in the database
- */
-function getEventById(req, res) {
-	var db = getDB();
+// apply inheritance
+util.inherits(Events, BaseModel);
 
-	// find the event with the specified id in the collection
-	db.get(COLLECTION).find({ _id: req.params.id }, function (err, data) {
-		if (err) {
-			// send internal server error status to client
-			res.sendStatus(500);
-		} else {
-			// send that data in JSON format
-			res.json(data[0]);
-		}
+Events.prototype.modelTest = function() {
+	console.log('Yay the events model worked!');
+};
 
-		db.close();
-	});
-}
-
-/**
- * Connect to the database and return that database
- */
-function getDB() {
-	return monk(process.env.MONGO_URI);
-}
-
-// export the functions below for modularity
-exports.getEvents = getEvents;
-exports.getEventById = getEventById;
+module.exports = Events;
