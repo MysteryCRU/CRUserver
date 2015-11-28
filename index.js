@@ -1,5 +1,10 @@
 var app = require('express')();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 var db = require('monk')(process.env.MONGO_URI);
+//var request = require('request'); // used to send requests, for testing
 
 // import event class/object and create a new instance
 var Event = require('./events/events.js');
@@ -59,6 +64,21 @@ app.get('/users', function (req, res) {
 
 app.get('/users/:id', function (req, res) {
     users.getById(req, res, db);
+});
+
+// testing function to make sure that json is being sent to he url
+/*app.get('/testUserCreation', function (req, res) {
+    request({
+        method: 'POST',
+        url: 'http://localhost:8080/createUser',
+        json: { first: 'Bob', last: 'Builder', email: 'bob@builder.com' }
+    }, function (err, response, body) {
+        console.log('testing ' + body);
+    });
+});*/
+
+app.post('/createUser', function (req, res) {
+    users.createUser(req, res, db);
 });
 
 app.get('/ministries', function (req, res) {
