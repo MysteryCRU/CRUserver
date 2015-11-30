@@ -66,7 +66,7 @@ app.get('/users/:id', function (req, res) {
     users.getById(req, res, db);
 });
 
-// testing function to make sure that json is being sent to he url
+// testing function to make sure that json is being sent to the url
 /*app.get('/testUserCreation', function (req, res) {
     request({
         method: 'POST',
@@ -77,7 +77,7 @@ app.get('/users/:id', function (req, res) {
     });
 });*/
 
-app.post('/createUser', function (req, res) {
+app.post('/users', function (req, res) {
     users.createUser(req, res, db);
 });
 
