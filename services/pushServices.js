@@ -25,7 +25,7 @@ function registerPushDevice(userId, pushToken, db){
       console.log("updated "+count+" results with a status "+status+" and err "+err);
    });
 }
-function unregisterPushDevice(userId, db){
+/*function unregisterPushDevice(userId, db){
 
    db.get('users').updateById( userId, {$unset: { pushToken}}, function(err, count){
    
@@ -37,7 +37,7 @@ function unregisterPushDevice(userId, db){
       
    });
 
-}
+}*/
 
 /**
 * criteria will be the criteria of whom the message must be sent out to

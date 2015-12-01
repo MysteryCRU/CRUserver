@@ -88,7 +88,7 @@ app.post('/users/:id/push', function(req, res){
 /**
 * unregistering a device to the user
 */
-app.delete('/users/:id/push', function(req, res){
+/*app.delete('/users/:id/push', function(req, res){
     if(!req.body) {
       res.sendStatus(400);
       return;
@@ -101,7 +101,7 @@ app.delete('/users/:id/push', function(req, res){
       res.sendStatus(e);
       return;
     }
-});
+});*/
 
 /**
 * create a push notification to a specific user
@@ -114,17 +114,17 @@ app.post('/push', function(req, res){
     //TODO make the push notifications work without 
     var gcm = require('node-gcm');
     var message = new gcm.Message({
-        collapseKey: 'demo',
+        //collapseKey: 'demo',
         priority: 'high',
         contentAvailable: true,
-        delayWhileIdle: true,
+        //delayWhileIdle: true,
         timeToLive: 3,
-        restrictedPackageName: "somePackageName",
-        dryRun: true,
-        data: {
-            key1: 'message1',
-            key2: 'message2'
-        },
+        //restrictedPackageName: "com.mysterycru.cruapp",
+        //dryRun: true,
+        //data: {
+          //  key1: 'message1',
+          //  key2: 'message2'
+        //},
         notification: {
             title: "Hello, World",
             icon: "ic_launcher",
