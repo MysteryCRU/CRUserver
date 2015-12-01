@@ -19,8 +19,6 @@ var campuses = new Campus('campus');
 
 // import user class/object and create a new instance
 
-var User = require('./services/userServices.js');
-var users = new User('users');
 
 var User = require('./users/users.js');
 var users = new User('users');
@@ -161,7 +159,7 @@ app.get('/users', function (req, res) {
 
 app.get('/users/:id', function (req, res) {
     users.getById(req, res, db);
-
+});
 // testing function to make sure that json is being sent to the url
 /*app.get('/testUserCreation', function (req, res) {
     request({

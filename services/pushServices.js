@@ -17,22 +17,6 @@ function registerPushDevice(userId, pushToken, db){
    if(!pushToken.token || !pushToken.type){
       throw 'invalid token object' + JSON.stringify(pushToken);
    }
-   /*var doc = db.get('user').findOne({'_id':userId});
-   var cache = [];
-   var val = JSON.stringify(doc, function(key, value) {
-       if (typeof value === 'object' && value !== null) {
-           if (cache.indexOf(value) !== -1) {
-               // Circular reference found, discard key
-               return;
-           }
-           // Store value in our collection
-           cache.push(value);
-       }
-       return value;
-   });
-   cache = null; // Enable garbage collection
-   console.log("found"+val);*/
-
    db.get('users').update({_id: userId}, {$set: { 'notifications.pushToken': pushToken} } , function(err, count, status){
       console.log("registering for"+userId+"...");
       if(err){
@@ -40,26 +24,7 @@ function registerPushDevice(userId, pushToken, db){
       }
       console.log("updated "+count+" results with a status "+status+" and err "+err);
    });
-
-      
-   //});
-      /*console.log(result);
-      if(result.nModified == 0){
-         console.log('could not add pushtoken '+JSON.stringify(pushToken)+' to userId '+JSON.stringify(userId)+"count :"+count);
-         return new Error('could not add pushtoken '+JSON.stringify(pushToken)+' to userId '+JSON.stringify(userId)+"count :"+count);
-      }*/
-   //TODO insert into token DB
-   console.log(pushToken);
-   push = pushToken;
-   //TODO remove this
-   /*var message = new gcm.Message();
-   message.addNotification('title','first push');
-   message.addNotification('body', 'lolol');
-   sendCompiledPush(message, [push.token]);
-
-   */
 }
-
 function unregisterPushDevice(userId, db){
 
    db.get('users').updateById( userId, {$unset: { pushToken}}, function(err, count){
