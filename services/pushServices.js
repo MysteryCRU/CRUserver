@@ -65,7 +65,7 @@ function sendCompiledPush(message, regTokens){
 
 exports.sendNotification = sendNotification;
 exports.register = registerPushDevice;
-exports.unregister = unregisterPushDevice;
+//exports.unregister = unregisterPushDevice;
 //TODO remove this before going live
 exports.sendCompiledPush = sendCompiledPush;
 
