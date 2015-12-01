@@ -45,7 +45,7 @@ app.get('/', function (req, res, next) {
     });
 
    res.end('<!DOCTYPE html> <html> <head> <title>Test</title></head><body>'
-           + '<h1>Testing Web Server, Bro!</h1></body></html>');
+           + '<h1>Monkeys</h1></body></html>');
 });
 
 app.get('/campuses', function (req, res) {
