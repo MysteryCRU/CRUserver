@@ -4,7 +4,7 @@ function BaseModel(collectionName) {
 
 BaseModel.prototype.getAll = function(req, res, db) {
 	// get events collection, find all campuses in the collection
-	/*db.get(this.collection).find({}, function (err, data) {
+	db.get(this.collection).find({}, function (err, data) {
 		if (err) {
 			// send internal server error status to client
 			res.sendStatus(500);
@@ -12,10 +12,7 @@ BaseModel.prototype.getAll = function(req, res, db) {
 			// send that data in JSON format
 			res.json(data);
 		}
-	});*/
-
-    res.end('<!DOCTYPE html> <html> <head> <title>Test</title></head><body>'
-           + '<h1>Testing Web Server, Bro!!!!!!!!!!!!!</h1></body></html>');
+	});
 };
 
 BaseModel.prototype.getById = function(req, res, db) {

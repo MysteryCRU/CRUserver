@@ -43,10 +43,7 @@ app.get('/', function (req, res, next) {
 });
 
 app.get('/campuses', function (req, res) {
-	//campuses.getAll(req, res, db);
-
-    res.end('<!DOCTYPE html> <html> <head> <title>Test</title></head><body>'
-           + '<h1>Kats</h1></body></html>');
+	campuses.getAll(req, res, db);
 });
 
 app.get('/campuses/:id', function (req, res) {
