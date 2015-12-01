@@ -110,33 +110,27 @@ app.post('/users/:id/push', function(req, res){
 app.post('/push', function(req, res){
     if(!req.body) {
       throw 'need value to send';
-    } 
+    }
     //TODO make the push notifications work without 
     var gcm = require('node-gcm');
     var message = new gcm.Message({
-        //collapseKey: 'demo',
         priority: 'high',
         contentAvailable: true,
-        //delayWhileIdle: true,
         timeToLive: 3,
-        //restrictedPackageName: "com.mysterycru.cruapp",
-        //dryRun: true,
-        //data: {
-          //  key1: 'message1',
-          //  key2: 'message2'
-        //},
         notification: {
-            title: "Hello, World",
+            title: "CRU Application",
             icon: "ic_launcher",
             body: req.body.message
         }
     });
+    message.addData('msgcnt','3');
 
     db.get('users').find({}, function(err, data){
       if(err){
         throw "cannot get users list";
       }
       var tokenList = [];
+      //get the ids for registration
       data.forEach(function(user){
         if(user.notifications.pushToken){
           tokenList.push(user.notifications.pushToken.token);
@@ -149,9 +143,11 @@ app.post('/push', function(req, res){
       push.sendCompiledPush(message, tokenList);
 
     });
-    
+    res.status(200);
+    res.end();
 
 });
+
 
 app.get('/users', function (req, res) {
     users.getAll(req, res, db);
