@@ -24,7 +24,7 @@ BaseModel.prototype.getById = function(req, res, db) {
 		} else {
 			// send that data in JSON format if there is any, null otherwise no
 			// match was found in the database for the id.
-			data.length > 1 ? res.json(data[0]) : res.json(null);
+			data.length >= 1 ? res.json(data[0]) : res.json(null);
 		}
 	});
 };
