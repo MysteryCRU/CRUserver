@@ -1,8 +1,11 @@
 var app = require('express')();
 var bodyParser = require('body-parser');
+
+//import push notification
+var push = require('./services/pushServices.js');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 var db = require('monk')(process.env.MONGO_URI);
 //var request = require('request'); // used to send requests, for testing
 
@@ -15,6 +18,8 @@ var Campus = require('./campuses/campuses.js');
 var campuses = new Campus('campus');
 
 // import user class/object and create a new instance
+
+
 var User = require('./users/users.js');
 var users = new User('users');
 
@@ -31,6 +36,7 @@ var sumMissions = new SummerMission('summermissions');
 
 var CommunityGroup = require('./communityGroups/communityGroups.js');
 var comGroups = new CommunityGroup('TBD');
+
 
 // I don't know what should happen when root is requested... so I'm leaving this
 app.get('/', function (req, res, next) {
@@ -58,6 +64,95 @@ app.get('/events/:id', function (req, res) {
 	events.getById(req, res, db);
 });
 
+//push notification end points
+/**
+* registering a device to the user
+*/
+app.post('/users/:id/push', function(req, res){
+  if(!req.body) {
+    res.sendStatus(400);
+    return;
+  }
+
+  try{
+     push.register(req.params.id, req.body, db);
+  } catch (e){
+     console.log("error registering " + e);
+     res.sendStatus(500);
+     return;
+  }
+  console.log("logged register");
+  res.sendStatus(200);                    
+});
+
+/**
+* unregistering a device to the user
+*/
+app.delete('/users/:id/push', function(req, res){
+    if(!req.body) {
+      res.sendStatus(400);
+      return;
+    }
+
+    try {
+      push.unregister(req.params.id, db);
+    } catch (e) {
+      console.log("error unregistering" + e);
+      res.sendStatus(e);
+      return;
+    }
+});
+
+/**
+* create a push notification to a specific user
+* {"message":"send this to errrrryone"}
+*/
+app.post('/push', function(req, res){
+    if(!req.body) {
+      throw 'need value to send';
+    } 
+    //TODO make the push notifications work without 
+    var gcm = require('node-gcm');
+    var message = new gcm.Message({
+        collapseKey: 'demo',
+        priority: 'high',
+        contentAvailable: true,
+        delayWhileIdle: true,
+        timeToLive: 3,
+        restrictedPackageName: "somePackageName",
+        dryRun: true,
+        data: {
+            key1: 'message1',
+            key2: 'message2'
+        },
+        notification: {
+            title: "Hello, World",
+            icon: "ic_launcher",
+            body: req.body.message
+        }
+    });
+
+    db.get('users').find({}, function(err, data){
+      if(err){
+        throw "cannot get users list";
+      }
+      var tokenList = [];
+      data.forEach(function(user){
+        if(user.notifications.pushToken){
+          tokenList.push(user.notifications.pushToken.token);
+        }
+      });
+      if(tokenList.length == 0){
+        console.log(" no users with tokens found");
+      }
+      console.log(tokenList);
+      push.sendCompiledPush(message, tokenList);
+
+    });
+    
+
+});
+
 app.get('/users', function (req, res) {
     users.getAll(req, res, db);
 });
@@ -65,7 +160,6 @@ app.get('/users', function (req, res) {
 app.get('/users/:id', function (req, res) {
     users.getById(req, res, db);
 });
-
 // testing function to make sure that json is being sent to the url
 /*app.get('/testUserCreation', function (req, res) {
     request({
@@ -122,6 +216,7 @@ process.on('SIGINT', function() {
 process.on('SIGTERM', function() {
 	closeServer();
 });
+
 
 function closeServer() {
 	console.log('Closing connection to database...');
