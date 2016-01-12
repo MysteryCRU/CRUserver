@@ -5,10 +5,11 @@ var cors = require('cors');
 //import push notification
 var push = require('./services/pushServices.js');
 
-var corsOptions = {
-  origin: 'http://54.86.175.74:8080/'
-};
-app.use(cors(cors));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
