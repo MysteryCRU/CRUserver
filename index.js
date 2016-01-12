@@ -5,9 +5,12 @@ var cors = require('cors');
 //import push notification
 var push = require('./services/pushServices.js');
 
-app.use(bodyParser.json());
-app.use(cors());
+var corsOptions = {
+  origin: 'http://54.86.175.74:8080/'
+};
+app.use(cors(cors));
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 var db = require('monk')(process.env.MONGO_URI);
 //var request = require('request'); // used to send requests, for testing
