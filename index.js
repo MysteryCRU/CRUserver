@@ -1,6 +1,5 @@
 var app = require('express')();
 var bodyParser = require('body-parser');
-var cors = require('cors');
 
 //import push notification
 var push = require('./services/pushServices.js');
