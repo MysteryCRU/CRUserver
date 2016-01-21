@@ -8,6 +8,7 @@ BaseModel.prototype.getAll = function(req, res, db) {
 		if (err) {
 			// send internal server error status to client
 			res.sendStatus(500);
+			console.log(err);
 		} else {
 			// send that data in JSON format
 			res.json(data);
