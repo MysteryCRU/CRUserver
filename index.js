@@ -13,7 +13,6 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 var db = require('monk')(process.env.MONGO_URI);
-//var request = require('request'); // used to send requests, for testing
 
 // import event class/object and create a new instance
 var Event = require('./events/events.js');
@@ -24,8 +23,6 @@ var Campus = require('./campuses/campuses.js');
 var campuses = new Campus('campus');
 
 // import user class/object and create a new instance
-
-
 var User = require('./users/users.js');
 var users = new User('users');
 
@@ -63,7 +60,11 @@ app.get('/campuses/:id', function (req, res) {
 });
 
 app.get('/events', function (req, res) {
-	events.getAll(req, res, db);
+    if (req.query.mins) {
+        events.getEventsByMinistry(req, res, db);
+    } else {
+	   events.getAll(req, res, db);
+    }
 });
 
 app.get('/events/:id', function (req, res) {
@@ -162,23 +163,18 @@ app.get('/users', function (req, res) {
 app.get('/users/:id', function (req, res) {
     users.getById(req, res, db);
 });
-// testing function to make sure that json is being sent to the url
-/*app.get('/testUserCreation', function (req, res) {
-    request({
-        method: 'POST',
-        url: 'http://localhost:8080/createUser',
-        json: { first: 'Bob', last: 'Builder', email: 'bob@builder.com' }
-    }, function (err, response, body) {
-        console.log('testing ' + body);
-    });
-});*/
 
 app.post('/users', function (req, res) {
     users.createUser(req, res, db);
 });
 
 app.get('/ministries', function (req, res) {
-    ministries.getAll(req, res, db);
+    console.log(req.query);
+    if (req.query.campuses) {
+        ministries.getMinistriesByCampus(req, res, db);
+    } else {
+        ministries.getAll(req, res, db);
+    }
 });
 
 app.get('/ministries/:id', function (req, res) {
