@@ -15,14 +15,14 @@ while ( iterator.hasNext() ) {
         print("Ministry " + ministryId +  " has no campuses.");
     }
 
-    for (index = 0; index < ministryCampuses.length; ++index) {
-        print("Adding ministry " + ministryId + " to campus " + ministryCampuses[index]);
+    ministryCampuses.forEach(function(campus) {
+        print("Adding ministry " + ministryId + " to campus " + campus);
 
         db.campus.update(
-            { _id: ministryCampuses[index]},
+            { _id: campus},
             { $push: { ministries: ministryId } }
         );
-    }
+    });
 }
 
 //
