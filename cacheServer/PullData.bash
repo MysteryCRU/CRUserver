@@ -10,10 +10,10 @@ then
     exit 1
 fi
 
-echo "Connection to server '$1', database '$3' ..."
+echo "Connection to server '$1', database '$3' {`date`} ..."
 
 # First, download the JSON for each collection from the official cru database
-echo " --- Downloading JSON ---"
+echo " --- Downloading JSON {`date`} ---"
 mkdir -p JSON
 for collection in $collections
 do
@@ -22,7 +22,7 @@ do
 done
 
 # Now upload that JSON to the local database
-echo " --- Importing JSON ---"
+echo " --- Importing JSON {`date`} ---"
 for collection in $collections
 do
     mongoimport --db cru --collection $collection --file "JSON/$collection.json" --drop
@@ -30,5 +30,5 @@ done
 rm -rf JSON/*
 
 # Finally, run the mongo script to add additional views to the local database
-echo " --- Updating fields ---"
+echo " --- Updating fields {`date`} ---"
 mongo cru UpdateTables.js
