@@ -10,6 +10,8 @@ while ( iterator.hasNext() ) {
     ministryCampuses = ministry["campuses"];
 
     if (ministryCampuses.length == 0) {
+        // In the production DB this would be an error. For the test DB
+        // this is often true.
         print("Ministry " + ministryId +  " has no campuses.");
     }
 
