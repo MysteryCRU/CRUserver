@@ -1,50 +1,49 @@
 
-//
-// Add ministries field to campus collection
-//
-iterator = db.ministries.find({}, {"_id": 1, "campuses": 1});
-while ( iterator.hasNext() ) {
-    ministry = iterator.next();
 
-    ministryId = ministry["_id"];
-    ministryCampuses = ministry["campuses"];
 
-    if (ministryCampuses.length == 0) {
-        // In the production DB this would be an error. For the test DB
-        // this is often true.
-        print("Ministry " + ministryId +  " has no campuses.");
+function AddBackConnections(fromCollectionName, toCollectionName, fromField, toField) {
+
+    fromCollection = db.getCollection(fromCollectionName);
+    toCollection = db.getCollection(toCollectionName);
+
+    query = {};
+    query["_id"] = 1;
+    query[fromField] = 1;
+
+    iterator = fromCollection.find({}, query);
+    while ( iterator.hasNext() ) {
+        fromRow = iterator.next();
+
+        fromRowId = fromRow["_id"];
+        fromRowBackConnections = fromRow[fromField];
+
+        if (typeof fromRowBackConnections == 'undefined') {
+            print("Field '" + fromField + "' apparently does not exist in row from '" + fromCollection + "'");
+            print(tojson(fromRow));
+            continue;
+        }
+
+        if (0 == fromRowBackConnections.length) {
+            // In the production DB this would be an error. For the test DB
+            // this is often true.
+            print("Element in '" + fromCollectionName + "' has no back connections: " + fromRowId);
+        }
+
+        fromRowBackConnections.forEach(function(toRowId) {
+            print("Adding connection from '" + fromCollectionName + "'' (" + fromRowId + ") to element in '" + toCollectionName + "' (" + toRowId + ")");
+
+            query = {};
+            query[toField] = fromRowId;
+
+            toCollection.update(
+                { _id: toRowId},
+                { $push: query }
+            );
+        });
     }
 
-    ministryCampuses.forEach(function(campus) {
-        print("Adding ministry " + ministryId + " to campus " + campus);
-
-        db.campus.update(
-            { _id: campus},
-            { $push: { ministries: ministryId } }
-        );
-    });
 }
 
-//
-// Add events field to ministries collection
-//
-iterator = db.events.find({}, {"_id": 1, "parentMinistries": 1});
-while ( iterator.hasNext() ) {
-    evnt = iterator.next();
 
-    evntId = evnt["_id"];
-    evntMinistries = evnt["parentMinistries"];
-
-    if (evntMinistries.length == 0) {
-        print("Event " + evntId +  " has no ministries.");
-    }
-
-    for (index = 0; index < evntMinistries.length; ++index) {
-        print("Adding event " + evntId + " to ministry " + evntMinistries[index]);
-
-        db.ministries.update(
-            { _id: evntMinistries[index]},
-            { $push: { events: evntId } }
-        );
-    }
-}
+AddBackConnections("ministries", "campus", "campuses", "ministries");
+AddBackConnections("events", "ministries", "parentMinistries", "events");
