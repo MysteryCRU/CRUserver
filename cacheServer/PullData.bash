@@ -6,11 +6,11 @@ collections='campus events posts users ministries summermissions ministryteams'
 
 if [ -z $3 ]
 then
-    echo "usage: ./PullData.bash <server> <password> <database>"
+    echo "usage: ./PullData.bash <server> <database> <password>"
     exit 1
 fi
 
-echo "Connection to server '$1', database '$3' {`date`} ..."
+echo "Connection to server '$1', database '$2' {`date`} ..."
 
 # First, download the JSON for each collection from the official cru database
 echo " --- Downloading JSON {`date`} ---"
@@ -18,7 +18,7 @@ mkdir -p JSON
 for collection in $collections
 do
     line="function printResult(r) { print(tojson(r)); } db.$collection.find().forEach(printResult);"
-    mongo "$1" -u $3 -p "$2" --quiet --eval "$line" > "JSON/$collection.json"
+    mongo "$1" -u $2 -p "$3" --quiet --eval "$line" > "JSON/$collection.json"
 done
 
 # Now upload that JSON to the local database
