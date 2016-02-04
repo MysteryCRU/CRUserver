@@ -212,6 +212,14 @@ app.get('/communityGroups/:id', function (req, res) {
     comGroups.getById(req, res, db);
 });
 
+app.post('/rides/add/', function(req, res) {
+    rides.add(req, res, db);
+});
+
+app.post('/rides/delete/:id', function(req, res) {
+    rides.deleteById(req, res, db);
+});
+
 app.get('/rides', function (req, res) {
     rides.getAll(req, res, db);
 });
