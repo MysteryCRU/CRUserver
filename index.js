@@ -212,12 +212,28 @@ app.get('/communityGroups/:id', function (req, res) {
     comGroups.getById(req, res, db);
 });
 
+app.post('/rides/add/', function(req, res) {
+    rides.add(req, res, db);
+});
+
+app.post('/rides/delete/:id', function(req, res) {
+    rides.deleteById(req, res, db);
+});
+
 app.get('/rides', function (req, res) {
     rides.getAll(req, res, db);
 });
 
 app.get('/rides/:id', function (req, res) {
     rides.getById(req, res, db);
+});
+
+app.post('/passengers/add/', function(req, res) {
+    passengers.add(req, res, db);
+});
+
+app.post('/passengers/delete/:id', function(req, res) {
+    passengers.deleteById(req, res, db);
 });
 
 app.get('/passengers', function (req, res) {
@@ -227,6 +243,7 @@ app.get('/passengers', function (req, res) {
 app.get('/passengers/:id', function (req, res) {
     passengers.getById(req, res, db);
 });
+
 
 // for Cntrl + C shutdowns
 process.on('SIGINT', function() {
@@ -238,7 +255,7 @@ process.on('SIGTERM', function() {
 	closeServer();
 });
 
-
+console.log("heyoo");
 
 
 function closeServer() {
