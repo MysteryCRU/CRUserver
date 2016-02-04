@@ -7,5 +7,4 @@ RUN \
   npm install . && \
   export MONGO_URI=mongodb://capstone-class:capstone-2015-2016@ds049754.mongolab.com:49754/heroku_s75tvv20
 
-#CMD ["node", "/CRUserver/index.js"]
-ENTRYPOINT ["/CRUserver/entry.bash"]
+CMD ["node", "/CRUserver/index.js"]
