@@ -40,6 +40,13 @@ var sumMissions = new SummerMission('summermissions');
 var CommunityGroup = require('./communityGroups/communityGroups.js');
 var comGroups = new CommunityGroup('TBD');
 
+var Ride = require('./rides/rides.js');
+var rides = new Ride('rides');
+
+var Passenger = require('./passengers/passengers.js');
+var passengers = new Passenger('passengers');
+
+
 
 // I don't know what should happen when root is requested... so I'm leaving this
 app.get('/', function (req, res, next) {
@@ -205,6 +212,14 @@ app.get('/communityGroups/:id', function (req, res) {
     comGroups.getById(req, res, db);
 });
 
+app.get('/rides', function (req, res) {
+    rides.getAll(req, res, db);
+});
+
+app.get('/passengers', function (req, res) {
+    passengers.getAll(req, res, db);
+});
+
 // for Cntrl + C shutdowns
 process.on('SIGINT', function() {
 	closeServer();
@@ -214,6 +229,8 @@ process.on('SIGINT', function() {
 process.on('SIGTERM', function() {
 	closeServer();
 });
+
+
 
 
 function closeServer() {
