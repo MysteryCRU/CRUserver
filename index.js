@@ -216,8 +216,16 @@ app.get('/rides', function (req, res) {
     rides.getAll(req, res, db);
 });
 
+app.get('/rides/:id', function (req, res) {
+    rides.getById(req, res, db);
+});
+
 app.get('/passengers', function (req, res) {
     passengers.getAll(req, res, db);
+});
+
+app.get('/passengers/:id', function (req, res) {
+    passengers.getById(req, res, db);
 });
 
 // for Cntrl + C shutdowns
