@@ -220,6 +220,14 @@ app.get('/rides/:id', function (req, res) {
     rides.getById(req, res, db);
 });
 
+app.post('/passengers/add/', function(req, res) {
+    passengers.add(req, res, db);
+});
+
+app.post('/passengers/delete/:id', function(req, res) {
+    passengers.deleteById(req, res, db);
+});
+
 app.get('/passengers', function (req, res) {
     passengers.getAll(req, res, db);
 });
@@ -227,6 +235,7 @@ app.get('/passengers', function (req, res) {
 app.get('/passengers/:id', function (req, res) {
     passengers.getById(req, res, db);
 });
+
 
 // for Cntrl + C shutdowns
 process.on('SIGINT', function() {
@@ -238,7 +247,7 @@ process.on('SIGTERM', function() {
 	closeServer();
 });
 
-
+console.log("heyoo");
 
 
 function closeServer() {
